@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem Regressiva Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Globais */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Orbitron', sans-serif; /* Fonte com estilo digital */
+            color: #f9fafb;
+            overflow: hidden;
+
+            /* --- IMAGEM DE FUNDO FUNCIONAL --- */
+            /* Este é um link de imagem de exemplo que está funcionando. */
+            /* SUBSTITUA ESTE LINK pelo seu novo "Link Direto" quando tiver um. */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            
+            /* Ajustes para a imagem preencher a tela toda */
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        /* Container principal que agrupa tudo */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(23, 37, 51, 0.5);
+            padding: 20px 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Título Principal */
+        .main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d1d5db;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(209, 213, 219, 0.5);
+            animation: blink-effect 2.5s infinite;
+        }
+
+        /* Definição da Animação de Piscar */
+        @keyframes blink-effect {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        /* Container do Relógio */
+        .clock-container {
+            position: relative;
+            text-align: center;
+        }
+        
+        /* Ícone de Relógio */
+        .clock-icon {
+            font-size: 1.5rem;
+            color: #00e5ff;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.7);
+            margin-bottom: 20px;
+        }
+        
+        /* Display principal da contagem */
+        .countdown-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+        }
+        
+        /* Cada parte do contador */
+        .countdown-part {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Números da contagem */
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #00e5ff; 
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+            line-height: 1;
+            min-width: 90px; 
+        }
+        
+        /* Rótulos */
+        .countdown-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #d1d5db; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 8px;
+        }
+
+        /* Separador entre os números */
+        .separator {
+            font-size: 2.5rem;
+            color: #6b7280; 
+            transform: translateY(-12px); 
+            text-shadow: none;
+        }
+
+        /* Estilos da Animação de Texto */
+        .animation-container {
+            margin-top: 25px;
+            height: 30px;
+            text-align: center;
+        }
+
+        #animated-text {
+            font-size: 1.5rem;
+            color: #f9fafb;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <h2 class="main-title">Restam</h2>
+
+        <div class="clock-container">
+            <div class="clock-icon">⏱️</div>
+            <div class="countdown-display">
+                <div class="countdown-part">
+                    <div id="days" class="countdown-number">00</div>
+                    <div class="countdown-label">Dias</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="countdown-part">
+                    <div id="hours" class="countdown-number">00</div>
+                    <div class="countdown-label">Horas</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="countdown-part">
+                    <div id="minutes" class="countdown-number">00</div>
+                    <div class="countdown-label">Minutos</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="countdown-part">
+                    <div id="seconds" class="countdown-number">00</div>
+                    <div class="countdown-label">Segundos</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-container">
+            <span id="animated-text"></span>
+        </div>
+    </div>
+
+    <script>
+        // --- LÓGICA DO CONTADOR ---
+        function updateCountdown() {
+            const targetDate = new Date('2025-07-29T00:00:00'); 
+            const now = new Date();
+            const difference = targetDate.getTime() - now.getTime();
+
+            if (difference <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                clearInterval(countdownInterval); 
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- LÓGICA DA ANIMAÇÃO DE TEXTO ---
+        (function startTextAnimation() {
+            const names = ["Timbau do sul", "Natal", "Jampa"];
+            let currentIndex = 0;
+            const animatedTextElement = document.getElementById('animated-text');
+
+            if (animatedTextElement) {
+                animatedTextElement.textContent = names[currentIndex];
+            }
+            
+            setInterval(() => {
+                if (!animatedTextElement) return;
+
+                animatedTextElement.style.opacity = '0';
+
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % names.length;
+                    animatedTextElement.textContent = names[currentIndex];
+                    animatedTextElement.style.opacity = '1';
+                }, 500);
+
+            }, 3000); 
+        })();
+    </script>
+
+</body>
+</html>
