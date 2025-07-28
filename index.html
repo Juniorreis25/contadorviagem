@@ -1,275 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contagem Regressiva Digital</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    <style>
-        /* Estilos Globais */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Orbitron', sans-serif;
-            color: #f9fafb;
-            overflow: hidden;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contagem Regressiva – Viagem</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --txt: #fff;
+      --accent: #00e5ff;
+      --glow: rgba(0, 229, 255, 0.55);
+      --alert: #ff3333;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-        /* Container principal que agrupa tudo */
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: rgba(23, 37, 51, 0.5);
-            padding: 20px 30px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin: 0 15px; /* Adiciona uma margem nas laterais para telas pequenas */
-        }
-        
-        /* Título Principal */
-        .main-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #d1d5db;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px rgba(209, 213, 219, 0.5);
-            animation: blink-effect 2.5s infinite;
-        }
+    /* Flash overlay */
+    .flash { position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 9999; }
+    .flash.play { animation: flash 0.25s ease forwards; }
+    @keyframes flash { 0% { opacity: 0; } 40% { opacity: 0.9; } 100% { opacity: 0; } }
 
-        /* Definição da Animação de Piscar */
-        @keyframes blink-effect {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.4;
-            }
-        }
+    .wrapper { width: 92%; max-width: 880px; text-align: center; }
+    .slider { position: relative; min-height: 260px; }
 
-        /* Container do Relógio */
-        .clock-container {
-            position: relative;
-            text-align: center;
-        }
-        
-        /* Ícone de Relógio */
-        .clock-icon {
-            font-size: 1.5rem;
-            color: #00e5ff;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.7);
-            margin-bottom: 20px;
-        }
-        
-        /* Display principal da contagem */
-        .countdown-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px; 
-        }
-        
-        /* Cada parte do contador */
-        .countdown-part {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        /* Números da contagem */
-        .countdown-number {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #00e5ff; 
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
-            line-height: 1;
-            min-width: 90px;
-            padding: 0 5px; /* Adicionado um respiro lateral */
-        }
-        
-        /* Rótulos */
-        .countdown-label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #d1d5db; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 8px;
-        }
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .slide.active { opacity: 1; transform: scale(1); }
+    .slide img { width: 100%; height: 260px; object-fit: cover; filter: brightness(0.7); }
+    .caption {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 1rem;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .alert-slide { background: #000; }
+    .alert-slide .caption { color: var(--alert); text-shadow: 0 0 15px rgba(255, 51, 51, 0.6); }
 
-        /* Separador entre os números */
-        .separator {
-            font-size: 2.5rem;
-            color: #6b7280; 
-            transform: translateY(-12px); 
-            text-shadow: none;
-        }
+    /* Countdown */
+    #countwrap { margin-top: 2.2rem; opacity: 0; transform: translateY(28px); transition: opacity 1.2s ease, transform 1.2s ease; }
+    #countwrap.visible { opacity: 1; transform: translateY(0); }
+    #timer {
+      font-family: 'Montserrat', monospace;
+      font-size: 5rem;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--glow), 0 0 24px var(--glow);
+    }
 
-        /* Estilos da Animação de Texto */
-        .animation-container {
-            margin-top: 25px;
-            height: 30px;
-            text-align: center;
-        }
-
-        #animated-text {
-            font-size: 1.5rem;
-            color: #f9fafb;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        /* --- Estilos para Telas Pequenas (Responsivo) --- */
-        /* As regras abaixo só serão aplicadas em telas com largura máxima de 600px */
-        @media (max-width: 600px) {
-            .main-title {
-                font-size: 1.5rem; /* Diminui o título */
-                letter-spacing: 3px;
-            }
-
-            .countdown-display {
-                gap: 2px; /* Diminui o espaço entre os números */
-            }
-
-            .countdown-number {
-                font-size: 2rem;  /* Reduz drasticamente o tamanho dos números */
-                min-width: auto;  /* Permite que os blocos dos números encolham */
-                padding: 0 4px;   /* Ajusta o respiro lateral */
-            }
-
-            .separator {
-                font-size: 1.5rem; /* Diminui o separador */
-                transform: translateY(-8px);
-            }
-
-            .countdown-label {
-                font-size: 0.5rem; /* Diminui os rótulos (Dias, Horas...) */
-                letter-spacing: 1px;
-            }
-
-            #animated-text {
-                font-size: 1.2rem; /* Diminui o texto animado */
-            }
-        }
-        
-        /* Ajustes ainda menores para telas muito estreitas */
-        @media (max-width: 400px) {
-            .countdown-number {
-                font-size: 1.6rem; /* Deixa os números ainda menores */
-            }
-
-            .main-title {
-                font-size: 1.2rem;
-            }
-            
-            #animated-text {
-                font-size: 1rem;
-            }
-        }
-
-    </style>
+    @media (max-width: 640px) { .caption { font-size: 1.5rem; } #timer { font-size: 3.2rem; letter-spacing: 3px; } }
+    @media (max-width: 420px) { .caption { font-size: 1.25rem; } #timer { font-size: 2.4rem; } }
+  </style>
 </head>
 <body>
+  <div class="flash" id="flash"></div>
 
-    <div class="main-container">
-        <h2 class="main-title">Restam</h2>
+  <div class="wrapper">
+    <div class="slider" id="slider">
+      <!-- Slide 0: ALERTA -->
+      <div class="slide alert-slide active" data-duration="4000">
+        <div class="caption">ATENÇÃO</div>
+      </div>
 
-        <div class="clock-container">
-            <div class="clock-icon">⏱️</div>
-            <div class="countdown-display">
-                <div class="countdown-part">
-                    <div id="days" class="countdown-number">00</div>
-                    <div class="countdown-label">Dias</div>
-                </div>
-                <div class="separator">:</div>
-                <div class="countdown-part">
-                    <div id="hours" class="countdown-number">00</div>
-                    <div class="countdown-label">Horas</div>
-                </div>
-                <div class="separator">:</div>
-                <div class="countdown-part">
-                    <div id="minutes" class="countdown-number">00</div>
-                    <div class="countdown-label">Minutos</div>
-                </div>
-                <div class="separator">:</div>
-                <div class="countdown-part">
-                    <div id="seconds" class="countdown-number">00</div>
-                    <div class="countdown-label">Segundos</div>
-                </div>
-            </div>
-        </div>
+      <!-- Slide 1: Praia pôr do sol -->
+      <div class="slide" data-duration="4000">
+        <img src="assets/Praia.png" alt="Praia pôr do sol" />
+        <div class="caption">Júnior, Bel, Anderson e&nbsp;Priscila</div>
+      </div>
 
-        <div class="animation-container">
-            <span id="animated-text"></span>
-        </div>
+      <!-- Slide 2: Ilha paradisíaca -->
+      <div class="slide" data-duration="4000">
+        <img src="assets/Ilha.png" alt="Ilha paradisíaca" />
+        <div class="caption">Estão preparados para a melhor viagem de suas vidas?</div>
+      </div>
+
+      <!-- Slide 3: Assento avião -->
+      <div class="slide" data-duration="5000" data-last>
+        <img src="assets/Poltrona.png" alt="Assento de avião" />
+        <div class="caption">Apertem os cintos, pois faltam poucas horas para isso acontecer</div>
+      </div>
     </div>
 
-    <script>
-        // --- LÓGICA DO CONTADOR ---
-        function updateCountdown() {
-            const targetDate = new Date('2025-07-29T00:00:00'); 
-            const now = new Date();
-            const difference = targetDate.getTime() - now.getTime();
+    <div id="countwrap"><div id="timer">00:00:00</div></div>
+  </div>
 
-            if (difference <= 0) {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
-                clearInterval(countdownInterval); 
-                return;
-            }
+  <script>
+    /* Alvo: 29/07/2025 08:45 (UTC‑3) */
+    const target = new Date('2025-07-29T08:45:00-03:00').getTime();
 
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const flash = document.getElementById('flash');
+    const countwrap = document.getElementById('countwrap');
+    const timer = document.getElementById('timer');
 
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
+    let idx = 0, handle;
+    function schedule() {
+      clearTimeout(handle);
+      handle = setTimeout(next, parseInt(slides[idx].dataset.duration, 10) || 4000);
+    }
+    function next() {
+      slides[idx].classList.remove('active');
+      flash.classList.add('play');
+      setTimeout(() => flash.classList.remove('play'), 240);
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+      if (slides[idx].dataset.last !== undefined) {
+        setTimeout(() => countwrap.classList.add('visible'), 600);
+      } else {
+        countwrap.classList.remove('visible');
+      }
+      schedule();
+    }
+    schedule();
 
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // --- LÓGICA DA ANIMAÇÃO DE TEXTO ---
-        (function startTextAnimation() {
-            const names = ["Timbau do sul", "Natal", "Jampa"];
-            let currentIndex = 0;
-            const animatedTextElement = document.getElementById('animated-text');
-
-            if (animatedTextElement) {
-                animatedTextElement.textContent = names[currentIndex];
-            }
-            
-            setInterval(() => {
-                if (!animatedTextElement) return;
-
-                animatedTextElement.style.opacity = '0';
-
-                setTimeout(() => {
-                    currentIndex = (currentIndex + 1) % names.length;
-                    animatedTextElement.textContent = names[currentIndex];
-                    animatedTextElement.style.opacity = '1';
-                }, 500);
-
-            }, 3000); 
-        })();
-    </script>
-
+    /* Countdown */
+    function tick() {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        timer.textContent = 'CHEGOU!';
+        return;
+      }
+      const h = Math.floor(diff / 36e5) % 24;
+      const m = Math.floor(diff / 6e4) % 60;
+      const s = Math.floor(diff / 1e3) % 60;
+      timer.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
 </body>
 </html>
