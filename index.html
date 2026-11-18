@@ -18,7 +18,15 @@
       color: #163b36;
       font-family: 'DM Sans', system-ui, sans-serif;
     }
-    .beach { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .beach {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 76% center;
+      pointer-events: none;
+    }
     .wrapper {
       position: relative;
       width: min(100%, 37rem);
@@ -41,31 +49,7 @@
   </style>
 </head>
 <body>
-  <svg class="beach" viewBox="0 0 1440 900" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
-  <defs>
-    <linearGradient id="sky" x2="0" y2="1" gradientUnits="objectBoundingBox">
-      <stop stop-color="#8bbbc3"/><stop offset="1" stop-color="#f7e8cc"/>
-    </linearGradient>
-    <linearGradient id="sea" x2=".2" y2="1" gradientUnits="objectBoundingBox">
-      <stop stop-color="#1b6e7e"/><stop offset=".65" stop-color="#53a69f"/><stop offset="1" stop-color="#abd1b3"/>
-    </linearGradient>
-    <g id="palm">
-      <path d="M0 225Q23 119 0 0Q42 123 13 225Z" fill="#544f37"/>
-      <path d="M4 2Q-63-57-110 5Q-47-17 4 2 M4 2Q-69-4-83 62Q-45 19 4 2 M4 2Q-26-68-68-60Q-24-37 4 2 M4 2Q41-64 114-26Q50-27 4 2 M4 2Q63-31 108 32Q44 4 4 2 M4 2Q64 12 69 71Q43 35 4 2" fill="#214d43"/>
-    </g>
-  </defs>
-  <path fill="url(#sky)" d="M0 0h1440v900H0z"/>
-  <circle cx="1030" cy="248" r="68" fill="#fff0cd" opacity=".75"/>
-  <path fill="url(#sea)" d="M0 390h1440v510H0z"/>
-  <path fill="#517d6e" opacity=".7" d="M0 388Q150 361 254 390Q300 403 377 411L0 432Z"/>
-  <path fill="#327a73" opacity=".52" d="M1040 468q95-30 181-12t219-4v24q-110 22-202 8t-198 4zM364 585q133-37 210-17t165 7q-106 37-169 28t-206 7z"/>
-  <path fill="none" stroke="#d9efda" stroke-width="3" opacity=".48" d="M50 479q68-9 156 0m750 63q135-18 282 0M160 567q57-10 113-6m556 55q95-14 190-5"/>
-  <path fill="#f4e2bc" d="M0 698q268 62 568 33t872-159v328H0Z"/>
-  <path fill="none" stroke="#fff3dc" stroke-width="10" opacity=".78" d="M0 700q269 61 569 31t871-158"/>
-  <path fill="#dcc197" d="M0 821q180 39 396 9t439 3q290-20 605-166v233H0Z"/>
-  <use href="#palm" transform="translate(1170 468) rotate(10) scale(1.2)"/>
-  <use href="#palm" transform="translate(1320 403) rotate(-8) scale(1.44)"/>
-</svg>
+  <img class="beach" src="assets/serrambi.webp" alt="" fetchpriority="high" />
   <main class="wrapper">
     <h1>Contagem regressiva para a viagem</h1>
     <p>17 de fevereiro de 2027</p>
