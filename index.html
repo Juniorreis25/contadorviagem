@@ -64,15 +64,15 @@
     #countwrap.visible { opacity: 1; transform: translateY(0); }
     #timer {
       font-family: 'Montserrat', monospace;
-      font-size: 5rem;
+      font-size: clamp(1.25rem, 7vw, 4rem);
       font-weight: 700;
-      letter-spacing: 6px;
+      letter-spacing: 0.04em;
       color: var(--accent);
       text-shadow: 0 0 12px var(--glow), 0 0 24px var(--glow);
     }
 
-    @media (max-width: 640px) { .caption { font-size: 1.5rem; } #timer { font-size: 3.2rem; letter-spacing: 3px; } }
-    @media (max-width: 420px) { .caption { font-size: 1.25rem; } #timer { font-size: 2.4rem; } }
+    @media (max-width: 640px) { .caption { font-size: 1.5rem; } }
+    @media (max-width: 420px) { .caption { font-size: 1.25rem; } }
   </style>
 </head>
 <body>
@@ -100,16 +100,16 @@
       <!-- Slide 3: Assento avião -->
       <div class="slide" data-duration="5000" data-last>
         <img src="assets/Poltrona.png" alt="Assento de avião" />
-        <div class="caption">Apertem os cintos, pois faltam poucas horas para isso acontecer</div>
+        <div class="caption">Apertem os cintos! A contagem regressiva para a viagem começou.</div>
       </div>
     </div>
 
-    <div id="countwrap"><div id="timer">00:00:00</div></div>
+    <div id="countwrap"><div id="timer">00d 00:00:00</div></div>
   </div>
 
   <script>
-    /* Alvo: 29/07/2025 08:45 (UTC‑3) */
-    const target = new Date('2025-07-29T08:45:00-03:00').getTime();
+    /* Início de 17/02/2027 no horário de Brasília */
+    const target = new Date('2027-02-17T00:00:00-03:00').getTime();
 
     const slides = Array.from(document.querySelectorAll('.slide'));
     const flash = document.getElementById('flash');
@@ -143,10 +143,11 @@
         timer.textContent = 'CHEGOU!';
         return;
       }
+      const days = Math.floor(diff / 864e5);
       const h = Math.floor(diff / 36e5) % 24;
       const m = Math.floor(diff / 6e4) % 60;
       const s = Math.floor(diff / 1e3) % 60;
-      timer.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      timer.textContent = `${days.toString().padStart(2, '0')}d ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     }
     tick();
     setInterval(tick, 1000);
